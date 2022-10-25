@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {HttpClientModule} from "@angular/common/http";
+import {RouterModule, Routes} from "@angular/router";
+
 
 import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
@@ -8,7 +11,21 @@ import { PostsComponent } from './components/posts/posts.component';
 import { PostComponent } from './components/post/post.component';
 import { CommentsComponent } from './components/comments/comments.component';
 import { CommentComponent } from './components/comment/comment.component';
-import {HttpClientModule} from "@angular/common/http";
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { HeaderComponent } from './components/header/header/header.component';
+import { UserDetailsComponent } from './components/user-details/user-details/user-details.component';
+
+
+let routes:Routes = [
+  {path: '', component:MainLayoutComponent, children:[
+      {path:'', redirectTo:'users', pathMatch:'full'},
+      {path: 'users', component:UsersComponent, children:[
+          {path:':id',component:UserDetailsComponent}
+        ]},
+      {path: 'posts', component:PostsComponent}
+    ]
+  },
+];
 
 @NgModule({
   declarations: [
@@ -18,11 +35,15 @@ import {HttpClientModule} from "@angular/common/http";
     PostsComponent,
     PostComponent,
     CommentsComponent,
-    CommentComponent
+    CommentComponent,
+    MainLayoutComponent,
+    HeaderComponent,
+    UserDetailsComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]
